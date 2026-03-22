@@ -432,7 +432,7 @@
 
             // 클립보드 붙여넣기 (Ctrl+V)
             document.addEventListener('paste', (e) => {
-                const appScreen = document.getElementById('app-screen');
+                const appScreen = document.getElementById('app-container');
                 if (appScreen.classList.contains('hidden')) return;
                 const items = e.clipboardData && e.clipboardData.items;
                 if (!items) return;
