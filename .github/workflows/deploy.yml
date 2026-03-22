@@ -1,0 +1,45 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main        # main 브랜치에 push될 때 자동 배포
+  workflow_dispatch: # 수동 실행도 허용
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Inject PIN from Secret
+        # __APP_PIN__ 플레이스홀더를 GitHub Secret 값으로 교체
+        # 실제 PIN은 GitHub Secrets에만 존재 → 코드에 절대 노출 안 됨
+        run: |
+          sed -i "s/__APP_PIN__/${{ secrets.APP_PIN }}/g" index.html
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
