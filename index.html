@@ -502,11 +502,7 @@
 
             try {
                 const baseUrl = gasUrl.split('?')[0];
-                const res = await fetch(baseUrl, {
-                    method: 'POST',
-                    redirect: 'follow',
-                    body: JSON.stringify({ action: 'list' })
-                });
+                const res = await fetch(baseUrl + '?action=list&_t=' + Date.now());
                 const result = await res.json();
                 if (result.success && result.data && result.data.length > 0) {
                     warehouseData = result.data;
