@@ -638,6 +638,8 @@
         // ============================================================
         function renderLinks(containerId, direct, viewer) {
             const container = document.getElementById(containerId);
+            const driveMatch = viewer && viewer.match(/\/file\/d\/([^/?]+)/);
+            const thumbnail = driveMatch ? `https://drive.google.com/thumbnail?id=${driveMatch[1]}&sz=w2000` : null;
             container.innerHTML = `
                 <div class="space-y-6">
                     <div class="space-y-4">
@@ -645,6 +647,7 @@
                         <div class="space-y-4">
                             ${renderItem('뷰어 링크', viewer)}
                             ${renderItem('직접 링크', direct)}
+                            ${thumbnail ? renderItem('썸네일 링크', thumbnail) : ''}
                         </div>
                     </div>
                     <div class="space-y-4">
